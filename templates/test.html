@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Button Test</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        button { padding: 10px 20px; margin: 5px; font-size: 16px; }
+        #log { background: #f0f0f0; padding: 10px; margin: 20px 0; height: 300px; overflow-y: auto; border: 1px solid #ccc; }
+        .console-line { font-family: monospace; font-size: 12px; margin: 2px 0; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Button Test</h1>
+    
+    <div>
+        <button onclick="testFunction1()">Test Button 1</button>
+        <button onclick="testFunction2()">Test Button 2</button>
+        <button onclick="testFunction3()">Test Button 3</button>
+        <button onclick="nextStep()">Next Step (if available)</button>
+    </div>
+    
+    <h2>Console Output:</h2>
+    <div id="log"></div>
+    
+    <button onclick="clearLog()">Clear Log</button>
+    <button onclick="testImport()">Test Import Module (F12 → Console)</button>
+    
+    <script>
+        const logEl = document.getElementById('log');
+        
+        function addLog(msg) {
+            const line = document.createElement('div');
+            line.className = 'console-line';
+            line.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+            logEl.appendChild(line);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        
+        function clearLog() {
+            logEl.innerHTML = '';
+        }
+        
+        function testFunction1() {
+            addLog('✓ Button 1 clicked');
+        }
+        
+        function testFunction2() {
+            addLog('✓ Button 2 clicked');
+        }
+        
+        function testFunction3() {
+            addLog('✓ Button 3 clicked');
+        }
+        
+        function nextStep() {
+            addLog('nextStep() called - checking if window.nextStep exists...');
+            if (typeof window.nextStep === 'function') {
+                addLog('✓ window.nextStep is a function');
+                addLog('⚠ But module version might be cached. Try F12 console.');
+            } else {
+                addLog('✗ window.nextStep is NOT defined');
+            }
+        }
+        
+        function testImport() {
+            addLog('Testing module import - Check browser F12 console for errors');
+            import('/static/js/main.js').then(() => {
+                addLog('✓ main.js imported');
+            }).catch(e => {
+                addLog('✗ main.js import error: ' + e.message);
+            });
+        }
+        
+        addLog('Page loaded. Click buttons to test.');
+        addLog('Check F12 Console for module loading errors.');
+    </script>
+</body>
+</html>

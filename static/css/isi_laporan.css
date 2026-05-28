@@ -1,0 +1,317 @@
+/* ============================================================
+   isi_laporan.css — v5.0 (Final Layout & Solid Docking Fix)
+   ============================================================ */
+
+:root {
+  --builder-bg: #f8fafc;
+  --builder-sidebar-bg: #ffffff;
+  --builder-border: rgba(226, 232, 240, 0.8);
+  --builder-accent: #1547d2;
+  --builder-accent-soft: rgba(21, 71, 210, 0.05);
+  --builder-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
+  --node-bab-bg: #eff6ff;
+  --node-sub-bg: #ffffff;
+  --node-item-bg: #fdfdfd;
+}
+
+/* ============================================================
+   1. RESET SCROLL BROWSER UTAMA (PENTING)
+   ============================================================ */
+body {
+  overflow-y: auto !important; /* Biarkan browser merespons normal */
+}
+
+/* ============================================================
+   2. GRID LAYOUT & UKURAN PRESISI (Kunci Scroll Internal)
+   ============================================================ */
+.builder-container {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.builder-layout {
+  display: grid !important;
+  grid-template-columns: 320px 1fr !important;
+  gap: 1.5rem;
+  /* KUNCI: Batasi tinggi layout agar scroll di dalamnya bisa aktif */
+  height: calc(100vh - 160px) !important;
+  min-height: 500px !important;
+  align-items: stretch !important;
+  animation: builder-fade-in 0.4s ease;
+}
+
+@keyframes builder-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   3. SIDEBAR KIRI (Scroll Mandiri)
+   ============================================================ */
+.builder-sidebar {
+  background: var(--builder-sidebar-bg);
+  border: 1px solid var(--builder-border);
+  border-radius: 24px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--builder-shadow);
+  
+  height: 100% !important;
+  overflow-y: auto !important; /* Scroll aktif khusus sidebar */
+}
+
+.builder-sidebar-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;
+}
+.btn-add-bab {
+  background: var(--builder-accent); color: white; border: 0; padding: 0.35rem 0.9rem;
+  border-radius: 12px; font-weight: 800; font-size: 0.8rem; transition: all 0.2s ease;
+}
+.btn-add-bab:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(21, 71, 210, 0.3); }
+
+.builder-sidebar-empty {
+  text-align: center; padding: 3rem 1rem; border: 2px dashed #e2e8f0; border-radius: 20px; color: #94a3b8;
+}
+.builder-sidebar-empty i { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+
+.builder-tree { display: flex; flex-direction: column; gap: 0.5rem; }
+
+/* ============================================================
+   4. EDITOR KANAN (Wadah Utama)
+   ============================================================ */
+.builder-editor {
+  background: white;
+  border: 1px solid var(--builder-border);
+  border-radius: 24px;
+  display: flex !important;
+  flex-direction: column !important;
+  box-shadow: var(--builder-shadow);
+  position: relative !important; /* Mengurung elemen absolute */
+  
+  height: 100% !important;
+  overflow: hidden !important; /* Bingkai luar editor dikunci */
+}
+
+/* Area Teks & Konten yang Bergeser */
+#isiEditorBody {
+  order: 1 !important;
+  flex: 1 !important;
+  overflow-y: auto !important; /* Scroll internal aktif di sini */
+  padding: 1.5rem !important;
+  scroll-behavior: smooth;
+}
+
+/* ============================================================
+   5. TOOLBAR BAWAH (Statis di Dasar Editor)
+   ============================================================ */
+.editor-fixed-footer {
+  order: 2 !important;
+  position: static !important; /* Menempel kokoh seperti dinding */
+  background: #f8fafc !important;
+  padding: 12px 20px !important;
+  border-top: 1px solid var(--builder-border) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+  border-radius: 0 0 24px 24px !important;
+  margin: 0 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Gaya Tombol Toolbar Tipis & Profesional */
+.editor-fixed-footer .btn {
+  font-size: 0.85rem !important;
+  font-weight: 800 !important;
+  padding: 6px 16px !important;
+  border-radius: 8px !important;
+  white-space: nowrap;
+}
+
+.editor-fixed-footer .btn-primary,
+.editor-fixed-footer .btn-success {
+  background-color: var(--builder-accent-soft) !important;
+  color: var(--builder-accent) !important;
+  border: 1px solid rgba(21, 71, 210, 0.15) !important;
+}
+.editor-fixed-footer .btn-primary:hover,
+.editor-fixed-footer .btn-success:hover {
+  background-color: var(--builder-accent) !important;
+  color: white !important;
+}
+
+.editor-fixed-footer .btn-outline-danger {
+  border: 1px solid #fecaca !important;
+  background: transparent !important;
+  color: #ef4444 !important;
+}
+.editor-fixed-footer .btn-outline-danger:hover { background: #fef2f2 !important; }
+
+/* ============================================================
+   6. TOMBOL TAMBAH (+) POJOK KANAN BAWAH
+   ============================================================ */
+.builder-fab-container {
+  position: absolute !important; /* Dikunci di dalam area `.builder-editor` */
+  right: 24px !important;
+  bottom: 80px !important; /* Berada tepat di atas toolbar statis */
+  z-index: 100 !important;
+}
+
+.builder-fab {
+  width: 56px; height: 56px; border-radius: 18px;
+  background: var(--builder-accent); color: white; border: 0;
+  font-size: 1.8rem; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 10px 25px rgba(21, 71, 210, 0.3); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.builder-fab.active { transform: rotate(45deg); background: #334155; }
+
+.builder-fab-menu {
+  position: absolute; right: 0; bottom: 70px; background: white;
+  border: 1px solid var(--builder-border); border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+  width: 220px; padding: 0.75rem; display: flex; flex-direction: column; gap: 4px; z-index: 1000;
+  animation: slideUp 0.3s ease;
+}
+.builder-fab-menu header { font-size: 0.65rem; font-weight: 1000; color: #94a3b8; padding: 0.5rem 0.75rem; letter-spacing: 0.1em; }
+.builder-fab-menu button {
+  background: transparent; border: 0; padding: 0.65rem 0.85rem; text-align: left;
+  font-size: 0.85rem; font-weight: 800; color: #334155; border-radius: 12px;
+  display: flex; align-items: center; transition: all 0.2s;
+}
+.builder-fab-menu button:hover { background: #f1f5f9; color: var(--builder-accent); }
+
+/* ============================================================
+   7. UI KONTEN EDITOR (Tampilan Textarea, Card, Dll)
+   ============================================================ */
+.active-badge { background: #f1f5f9; padding: 0.35rem 1rem; border-radius: 100px; font-size: 0.75rem; font-weight: 900; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+.btn-clear-selection { background: transparent; border: 1px solid #e2e8f0; padding: 0.3rem 0.8rem; border-radius: 10px; font-size: 0.8rem; font-weight: 700; color: #ef4444; }
+
+.editor-view-card { animation: fadeIn 0.3s ease; padding-bottom: 1.5rem !important; }
+.editor-view-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #f1f5f9; }
+.editor-view-icon { width: 48px; height: 48px; background: var(--builder-accent-soft); color: var(--builder-accent); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+.editor-view-title-meta { margin: 0; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.1em; }
+
+.editor-label { font-size: 0.8rem; font-weight: 900; color: #64748b; margin-bottom: 0.5rem; display: block; }
+.editor-input-lg { width: 100%; padding: 0.8rem 1rem; border-radius: 14px; border: 1px solid #e2e8f0; font-size: 1.1rem; font-weight: 800; color: #1e293b; outline: none; transition: border-color 0.2s; }
+.editor-input-lg:focus { border-color: var(--builder-accent); box-shadow: 0 0 0 4px var(--builder-accent-soft); }
+
+.editor-textarea { width: 100%; padding: 1rem; border-radius: 16px; border: 1px solid #e2e8f0; font-size: 0.95rem; line-height: 1.7; color: #334155; min-height: 150px; outline: none; resize: none; }
+.editor-textarea:focus { border-color: var(--builder-accent); }
+
+.editor-card-list { border-left: 6px solid #10b981 !important; }
+.editor-card-paragraf { border-left: 6px solid #cbd5e1 !important; }
+.editor-card-gambar { border-left: 6px solid #f59e0b !important; }
+
+/* Tree Nodes Sidebar */
+.isi-tree-node { border-radius: 14px; border: 1px solid transparent; transition: all 0.2s ease; position: relative; }
+.tree-row { display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0.85rem; cursor: pointer; border-radius: 12px; touch-action: none; }
+.tree-row:hover { background: var(--builder-accent-soft); }
+.isi-tree-node.active > .tree-row { background: var(--builder-accent-soft); border: 1px solid rgba(21, 71, 210, 0.2); }
+.tree-row-left { display: flex; align-items: center; gap: 0.6rem; flex: 1; min-width: 0; }
+.tree-chevron { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: #94a3b8; transition: transform 0.2s ease; }
+.tree-chevron.expanded { transform: rotate(90deg); }
+.tree-icon { font-size: 1.1rem; display: flex; align-items: center; }
+.tree-title { font-size: 0.88rem; font-weight: 800; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.tree-actions { opacity: 0; transition: opacity 0.2s ease; }
+.tree-row:hover .tree-actions { opacity: 1; }
+.btn-node-opt { background: transparent; border: 0; color: #64748b; padding: 2px 6px; border-radius: 6px; }
+.btn-node-opt:hover { background: rgba(0,0,0,0.05); color: var(--builder-accent); }
+
+.isi-tree-bab { background: var(--node-bab-bg); border-color: rgba(21, 71, 210, 0.1); }
+.isi-tree-subbab { background: var(--node-sub-bg); border-color: var(--builder-border); }
+.isi-tree-content { background: var(--node-item-bg); border-color: transparent; }
+.isi-tree-gambar .tree-icon { color: #f59e0b; }
+.isi-tree-list .tree-icon { color: #10b981; }
+.isi-tree-paragraf .tree-icon { color: #64748b; }
+.isi-tree-children {
+  margin-left: 1.25rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid #dbe5f3;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.isi-tree-node.level-3,
+.isi-tree-node.level-4,
+.isi-tree-node.level-5,
+.isi-tree-node.level-6,
+.isi-tree-node.level-7,
+.isi-tree-node.level-8 {
+  background: #f8fafc;
+  border-color: rgba(148, 163, 184, 0.28);
+}
+
+.isi-tree-node.level-3 .tree-row,
+.isi-tree-node.level-4 .tree-row,
+.isi-tree-node.level-5 .tree-row,
+.isi-tree-node.level-6 .tree-row,
+.isi-tree-node.level-7 .tree-row,
+.isi-tree-node.level-8 .tree-row {
+  padding-left: 0.65rem;
+  min-height: 38px;
+}
+
+.isi-tree-node.level-4 { margin-left: 0.45rem; }
+.isi-tree-node.level-5 { margin-left: 0.9rem; }
+.isi-tree-node.level-6 { margin-left: 1.35rem; }
+.isi-tree-node.level-7 { margin-left: 1.8rem; }
+.isi-tree-node.level-8 { margin-left: 2.25rem; }
+
+/* Drag and Drop Visuals */
+.sortable-ghost { opacity: 0.4 !important; background-color: #ecfdf5 !important; border: 2px dashed #10b981 !important; border-radius: 8px; }
+.sortable-chosen { background-color: #f8fafc; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); }
+.sortable-drag { opacity: 0.95 !important; transform: scale(1.02); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); background: #ffffff !important; border: 1px solid #e2e8f0 !important; }
+.sortable-drop-zone-active { border: 2px dashed #3b82f6 !important; background-color: rgba(59, 130, 246, 0.03) !important; min-height: 40px; }
+
+/* Image Upload */
+.image-preview-zone { border: 2px dashed #cbd5e1; border-radius: 20px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s; background: #f8fafc; }
+.image-preview-zone:hover { border-color: var(--builder-accent); background: var(--builder-accent-soft); }
+.upload-placeholder { color: #94a3b8; }
+.upload-placeholder i { font-size: 2.5rem; }
+
+/* List Item Styles */
+.list-item-block { position: relative; }
+.list-item-block.level-1 { margin-left: 1.15rem; }
+.list-item-block.level-2 { margin-left: 2.3rem; }
+.list-item-block.level-3 { margin-left: 3.45rem; }
+.list-item-block.level-4 { margin-left: 4.6rem; }
+.list-item-block.level-5 { margin-left: 5.75rem; }
+.list-item-children {
+  margin-left: 1.05rem;
+  padding-left: 0.85rem;
+  border-left: 2px solid #dcfce7;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+.list-item-main { display: flex; gap: 12px; align-items: flex-start; padding: 10px 14px; background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; transition: all 0.2s ease; position: relative; }
+.list-item-main:hover { border-color: #059669; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.08); }
+.list-item-handle { cursor: grab; color: #cbd5e1; padding: 8px 4px; margin: -8px -4px 0 -4px; font-size: 1.2rem; }
+.list-item-label { font-weight: 800; color: #047857; padding-top: 1px; min-width: 2.25rem; text-align: right; }
+.list-item-content { flex: 1; min-width: 0; }
+.list-item-text-input,
+.list-item-title-input {
+  width: 100%;
+  border: 1px solid #dbe5f3;
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.9rem;
+}
+.list-item-text-input { min-height: 42px; resize: vertical; line-height: 1.55; }
+.list-item-title-input { font-weight: 800; color: #172033; }
+
+/* Miscellaneous */
+.builder-toolbar { display: flex; justify-content: space-between; align-items: center; padding: 0.55rem 0.9rem; background: rgba(255,255,255,0.92); border-radius: 16px; border: 1px solid rgba(226, 232, 240, 0.75); }
+.full-view-main-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding: 1.25rem; background: var(--builder-accent-soft); border-radius: 20px; border: 1px solid rgba(21, 71, 210, 0.1); }
+.full-view-icon { width: 44px; height: 44px; background: var(--builder-accent); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
